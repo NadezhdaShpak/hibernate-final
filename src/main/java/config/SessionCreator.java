@@ -28,8 +28,8 @@ public class SessionCreator implements AutoCloseable {
                 .buildSessionFactory();
     }
 
-    public Session getSession() {
-        return sessionFactory.openSession();
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     @Override

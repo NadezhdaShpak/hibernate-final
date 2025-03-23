@@ -14,8 +14,8 @@ public abstract class AbstractDAO<T> {
         this.session = session;
     }
 
-    public T getById(final short id) {
-        return (T) getCurrentSession().get(clazz, id);
+    public T getById(final int id) {
+        return getCurrentSession().get(clazz, id);
     }
 
     public List<T> getItems(int from, int count) {
