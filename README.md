@@ -3,10 +3,10 @@
 Для проеута используется Java 21.
 Убедись, что выбранные порты не заняты
   
-1. Клонируй репозиторий
-2. Перейди в папку docker
+1. Клонирование репозитория и переход в папку docker
 ```bash
-cd путь\к\проекту\hibernate-final\docker
+git clone https://github.com/NadezhdaShpak/hibernate-final
+cd hibernate-final\docker
 ```
 3. Запуск MySQL сервер на порту 3305:3306, Redis сервер на порту 6379:6379 и проект как докер-контейнеры
 MYSQL_ROOT_PASSWORD=root (можно изменить в файле docker/Dockerfile)
