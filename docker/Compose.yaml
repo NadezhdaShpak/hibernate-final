@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3305:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: world
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./dump-hibernate-final.sql:/docker-entrypoint-initdb.d/dump-hibernate-final.sql
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "--password=pass" ]
+      timeout: 10s
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+  hibernate-final:
+    read_only: false
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./logs:/app/logs
+    container_name: hibernate-final
+    image: hibernate-final
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge

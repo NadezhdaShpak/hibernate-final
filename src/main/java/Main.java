@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
-
 @Slf4j
 public class Main {
     private final SessionFactory sessionFactory;
@@ -63,8 +62,8 @@ public class Main {
         main.testMysqlData(ids);
         long stopMysql = System.currentTimeMillis();
 
-        System.out.printf("%s:\t%d ms\n", "Redis", (stopRedis - startRedis));
-        System.out.printf("%s:\t%d ms\n", "MySQL", (stopMysql - startMysql));
+        log.info("{}:\t{} ms\n", "Redis", (stopRedis - startRedis));
+        log.info("{}:\t{} ms\n", "MySQL", (stopMysql - startMysql));
 
         main.shutdown();
     }
@@ -133,7 +132,7 @@ public class Main {
     }
 
     private RedisClient prepareRedisClient() {
-        RedisClient redisClient = RedisClient.create(RedisURI.create("localhost", 6379));
+        RedisClient redisClient = RedisClient.create(RedisURI.create("redis", 6379));
         try (StatefulRedisConnection<String, String> connection = redisClient.connect()) {
             log.info("\n---Connected to Redis---\n");
         }

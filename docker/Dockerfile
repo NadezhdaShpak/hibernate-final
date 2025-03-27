@@ -1,7 +1,14 @@
-FROM mysql:8.0
-ENV MYSQL_ROOT_PASSWORD=root
-ENV MYSQL_DATABASE=world
-ENV MYSQL_USER=user
-ENV MYSQL_PASSWORD=pass
-COPY dump-hibernate-final.sql /docker-entrypoint-initdb.d/
-RUN chmod 644 /docker-entrypoint-initdb.d/dump-hibernate-final.sql
+#build project
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+#run project
+FROM openjdk:21-jdk-oracle
+RUN mkdir -p /app/logs && chmod 777 /app/logs
+WORKDIR /app
+COPY --from=builder /app/target/hibernate-final*.jar hibernate-final.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "hibernate-final.jar"]
