@@ -7,8 +7,6 @@ RUN mvn clean package -DskipTests
 
 #run project
 FROM openjdk:21-jdk-oracle
-RUN mkdir -p /app/logs && chmod 777 /app/logs
 WORKDIR /app
 COPY --from=builder /app/target/hibernate-final*.jar hibernate-final.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "hibernate-final.jar"]
+ENTRYPOINT ["java", "-jar", "hibernate-final.jar", "bench.Benchmark"]

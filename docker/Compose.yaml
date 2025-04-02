@@ -32,7 +32,7 @@ services:
       timeout: 3s
       retries: 5
 
-  hibernate-final:
+  benchmark:
     read_only: false
     build:
       context: ..
